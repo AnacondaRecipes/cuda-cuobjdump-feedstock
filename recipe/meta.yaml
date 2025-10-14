@@ -1,6 +1,6 @@
 {% set name = "cuda-cuobjdump" %}
-{% set version = "12.4.127" %}
-{% set cuda_version = "12.4" %}
+{% set version = "12.8.90" %}
+{% set cuda_version = "12.8" %}
 {% set platform = "linux-x86_64" %}  # [linux64]
 {% set platform = "linux-ppc64le" %}  # [ppc64le]
 {% set platform = "linux-sbsa" %}  # [aarch64]
@@ -14,19 +14,21 @@ package:
 
 source:
   url: https://developer.download.nvidia.com/compute/cuda/redist/cuda_cuobjdump/{{ platform }}/cuda_cuobjdump-{{ platform }}-{{ version }}-archive.{{ extension }}
-  sha256: ae4f9bcb5333b78a84a3babe23feeb8d48c00b6faa21b31477ce4c19f22f39a4  # [linux64]
-  sha256: f80c713d690d4f0eef21648d45e47b6de08212a5b3291747f35950564fb37196  # [ppc64le]
-  sha256: d9076a8261d5c7bd49e7892c76760ddbff0bed9c84e20d86d472d3ac33535495  # [aarch64]
-  sha256: 8a8eacddc1c0b9e6530a149e60d33219a18d5be586a5c9dab0996ed1214ab602  # [win]
+  sha256: dbf41355a0f7a8aa491c1839a6c6ff8df02cdb6c6eefd66360543616c1b4980f  # [linux64]
+  sha256: 8be3b7eb313c65353ccffdca94698c9f207e2889444ec1d38f41917654b6d234  # [aarch64]
+  sha256: af6c4b7678cd9f3f3b8eeff7cc44f9d732bfacf70b1bdd03abccc25fec6c1ac1  # [win]
 
 build:
   number: 1
-  skip: true  # [osx or (linux and s390x)]
+  binary_relocation: false
+  skip: true  # [osx or ppc64le]
 
 requirements:
   build:
     - {{ compiler("c") }}
     - {{ compiler("cxx") }}
+    - {{ stdlib("c") }}
+    - cf-nvidia-tools 1  # [linux]
   host:
     - cuda-version {{ cuda_version }}
   run:
@@ -34,8 +36,13 @@ requirements:
     - cuda-nvdisasm
 
 test:
+  requires:
+    - patchelf  # [linux]
+  files:
+    - test-rpath.sh
   commands:
-    - test -f $PREFIX/bin/cuobjdump  # [linux]
+    - test -f $PREFIX/bin/cuobjdump                     # [linux]
+    - bash test-rpath.sh                                # [linux]
     - if not exist %LIBRARY_BIN%\\cuobjdump.exe exit 1  # [win]
 
 about:
