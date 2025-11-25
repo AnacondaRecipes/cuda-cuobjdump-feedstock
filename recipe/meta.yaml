@@ -1,8 +1,7 @@
 {% set name = "cuda-cuobjdump" %}
-{% set version = "12.8.90" %}
-{% set cuda_version = "12.8" %}
+{% set version = "13.0.85" %}
+{% set cuda_version = "13.0" %}
 {% set platform = "linux-x86_64" %}  # [linux64]
-{% set platform = "linux-ppc64le" %}  # [ppc64le]
 {% set platform = "linux-sbsa" %}  # [aarch64]
 {% set platform = "windows-x86_64" %}  # [win]
 {% set extension = "tar.xz" %}  # [not win]
@@ -14,14 +13,14 @@ package:
 
 source:
   url: https://developer.download.nvidia.com/compute/cuda/redist/cuda_cuobjdump/{{ platform }}/cuda_cuobjdump-{{ platform }}-{{ version }}-archive.{{ extension }}
-  sha256: dbf41355a0f7a8aa491c1839a6c6ff8df02cdb6c6eefd66360543616c1b4980f  # [linux64]
-  sha256: 8be3b7eb313c65353ccffdca94698c9f207e2889444ec1d38f41917654b6d234  # [aarch64]
-  sha256: af6c4b7678cd9f3f3b8eeff7cc44f9d732bfacf70b1bdd03abccc25fec6c1ac1  # [win]
+  sha256: bd624dcb2089842add8f293efab1d21aa076c98b36d8dcb64347fe08fb03315d  # [linux64]
+  sha256: cd0304f70ff905421da2ca0fe53cfc384baa48d6ff6b34f92a80cf723064e827  # [aarch64]
+  sha256: cddbc524dc229c708cc989e4ff2d636ba342c695e0f60c1026a1b5f76de4b77b  # [win]
 
 build:
-  number: 1
+  number: 0
   binary_relocation: false
-  skip: true  # [osx or ppc64le]
+  skip: true  # [osx]
 
 requirements:
   build:
@@ -55,7 +54,10 @@ about:
     Extracts information from CUDA binary files and presents them in human
     readable format.
   doc_url: https://docs.nvidia.com/cuda/index.html
+  dev_url: https://docs.nvidia.com/cuda/index.html
 
 extra:
+  skip-lints:
+    - license_file_overspecified
   recipe-maintainers:
     - conda-forge/cuda
