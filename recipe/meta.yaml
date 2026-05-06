@@ -49,6 +49,7 @@ about:
   license_file: LICENSE
   license: LicenseRef-NVIDIA-End-User-License-Agreement
   license_url: https://docs.nvidia.com/cuda/eula/index.html
+  license_family: Other
   summary: Extracts information from CUDA binary files
   description: |
     Extracts information from CUDA binary files and presents them in human
@@ -57,7 +58,5 @@ about:
   dev_url: https://docs.nvidia.com/cuda/index.html
 
 extra:
-  skip-lints:
-    - license_file_overspecified
   recipe-maintainers:
     - conda-forge/cuda
